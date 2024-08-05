@@ -59,7 +59,9 @@ class _TimeRangeState extends State<TimeRange> {
     super.initState();
     setRange();
     if (widget.initialRange != null) {
-      widget.onRangeCompleted(widget.initialRange);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onRangeCompleted(widget.initialRange);
+      });
     }
   }
 
