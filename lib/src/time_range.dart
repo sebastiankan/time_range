@@ -5,7 +5,7 @@ import 'package:time_range/src/util/time_of_day_extension.dart';
 typedef TimeRangeSelectedCallback = void Function(TimeRangeResult? range);
 
 class TimeRange extends StatefulWidget {
-  TimeRange({
+  const TimeRange({
     Key? key,
     required this.timeBlock,
     required this.onRangeCompleted,
@@ -25,11 +25,7 @@ class TimeRange extends StatefulWidget {
     this.textStyle,
     this.activeTextStyle,
     this.alwaysUse24HourFormat = false,
-  })  : assert(
-          lastTime.after(firstTime),
-          'lastTime can not be before firstTime',
-        ),
-        super(key: key);
+  }) : super(key: key);
 
   final int timeStep;
   final int timeBlock;
@@ -111,7 +107,7 @@ class _TimeRangeState extends State<TimeRange> {
           ),
         const SizedBox(height: 8),
         TimeList(
-          firstTime: _getFirstTimeEndHour(),
+          firstTime: widget.firstTime,
           lastTime: widget.lastTime,
           initialTime: _endHour,
           timeStep: widget.timeBlock,
@@ -129,30 +125,12 @@ class _TimeRangeState extends State<TimeRange> {
     );
   }
 
-  TimeOfDay _getFirstTimeEndHour() {
-    final timeMinutes = widget.minimalTimeRange ?? widget.timeBlock;
-
-    return _startHour == null
-        ? widget.firstTime.add(minutes: timeMinutes)
-        : _startHour!.add(minutes: timeMinutes);
-  }
-
   void _startHourChanged(TimeOfDay hour) {
     setState(() => _startHour = hour);
 
     widget.onFirstTimeSelected?.call(hour);
 
-    if (_endHour != null) {
-      if (_endHour!.inMinutes() <= _startHour!.inMinutes() ||
-          (_endHour!.inMinutes() - _startHour!.inMinutes())
-                  .remainder(widget.timeBlock) !=
-              0) {
-        _endHour = null;
-        widget.onRangeCompleted(null);
-      } else {
-        widget.onRangeCompleted(TimeRangeResult(_startHour!, _endHour!));
-      }
-    }
+    widget.onRangeCompleted(TimeRangeResult(_startHour!, _endHour!));
   }
 
   void _endHourChanged(TimeOfDay hour) {
