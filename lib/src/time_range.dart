@@ -58,6 +58,9 @@ class _TimeRangeState extends State<TimeRange> {
   void initState() {
     super.initState();
     setRange();
+    if (widget.initialRange != null) {
+      widget.onRangeCompleted(widget.initialRange);
+    }
   }
 
   @override
