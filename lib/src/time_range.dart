@@ -68,7 +68,7 @@ class _TimeRangeState extends State<TimeRange> {
   @override
   void didUpdateWidget(TimeRange oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setRange();
+    // setRange();
   }
 
   void setRange() {
